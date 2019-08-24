@@ -1,0 +1,14 @@
+.jumboSize {
+    height: 300px !important;
+/*     background-image: url("./components/img/landing.png");
+    background-repeat: no-repeat, repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; */
+
+}
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
