@@ -19,12 +19,12 @@ def collision():
     return "Success"
 
 
-@app.route('/image', methods=['PUT', 'POST'])
+@app.route('/image', methods=['POST'])
 def image():
-
     img = request.get_json('file')
-    filepath = "~/Pictures/" + img
-    s3.upload_file(filename, bucket_name, "jpg.jpg")
+    print(img)
+    filepath = "/home/seen/Pictures/" + img['filename']
+    s3.upload_file(filepath, bucket_name, "jpg.jpg")
     return "Success"
 
 

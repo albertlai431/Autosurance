@@ -13,14 +13,14 @@ export const signup = (data, history) => dispatch => {
 export const collisioncreate = (data, history) => dispatch => {
   axios
     .post("/collision", data)
-    .then(res => console.log("Success"))
+    .then(res => console.log("Coll crate"))
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
 
 // Images
-export const imageExport = (img, history) => dispatch => {
+export const imageExport = img => dispatch => {
   axios
-    .post("/image", img, { headers: { "Content-Type": img.type } })
-    .then(res => history.push("/dashboard"))
+    .post("/image", img)
+    .then(res => console.log("Image export"))
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
