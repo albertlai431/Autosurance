@@ -1,8 +1,7 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
+import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
+import { connect } from "react-redux";
 
 // Helper
 import SelectList from "../common/SelectList";
@@ -121,7 +120,7 @@ class CollisionForm extends Component {
         prompt(error);
       } else {
         pullResults = JSON.parse(JSON.stringify(data)).Payload;
-        //console.log(pullResults);
+        // console.log(pullResults);
       }
     });
     console.log(pullResults);
@@ -162,7 +161,12 @@ class CollisionForm extends Component {
 
     console.log(this.state.formData);
     return (
-      <div className="container pt-5" style={{ paddingBottom: "200px" }}>
+      <div
+        className="container pt-5"
+        style={{
+          paddingBottom: "200px"
+        }}
+      >
         <h3 className="font-weight-bold text-center">Enter Collision Data</h3>
 
         <form onSubmit={this.onSubmit} className="pt-3">
@@ -210,17 +214,6 @@ class CollisionForm extends Component {
               />
             </div>
           </div>
-
-          {/*  <button className="btn mt-3">
-            <input
-              type="file"
-              id="file"
-              ref="fileUploader"
-              name="url"
-              value={this.state.url}
-              onChange={this.handleClick}
-            />
-          </button> */}
 
           <ImageUploader
             withIcon={true}
