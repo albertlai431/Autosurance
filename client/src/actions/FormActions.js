@@ -26,3 +26,16 @@ export const collisioncreate = (data, history) => dispatch => {
       })
     );
 };
+
+// Images
+export const imageExport = img => dispatch => {
+  axios
+    .post("/images", img)
+    .then(res => console.log("success"))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
