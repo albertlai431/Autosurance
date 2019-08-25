@@ -1,20 +1,27 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 // Helper
 import SelectList from "../common/SelectList";
 
+// Action func
+import { collisioncreate } from "../../actions/FormActions";
+
 class CollisionForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       claim: "",
       class: "",
-      size: ""
+      size: "",
+      url: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   onChange = e => {
@@ -27,13 +34,52 @@ class CollisionForm extends Component {
     const collisionData = {
       claim: this.state.claim,
       class: this.state.class,
-      size: this.state.size
+      size: this.state.size,
+      url: this.state.url
     };
 
     console.log(collisionData);
+    this.props.collisioncreate(collisionData, this.props.history);
   };
 
+  handleClick(e) {
+    this.setState({ [e.target.name]: e.target.value });
+
+    this.refs.fileUploader.click();
+    console.log(e);
+  }
+
   render() {
+    var AWS = require("aws-sdk");
+
+    AWS.config = new AWS.Config();
+    AWS.config.accessKeyId = "***REMOVED***";
+    AWS.config.secretAccessKey = "***REMOVED***";
+    AWS.config.region = "us-east-1";
+
+    // create JSON object for parameters for invoking Lambda function
+    var pullParams = {
+      FunctionName: "predictImage",
+      InvocationType: "RequestResponse",
+      LogType: "None",
+      Payload: JSON.stringify({ Body: "0001.jpg" })
+    };
+
+    // create variable to hold data returned by the Lambda function
+    var pullResults;
+
+    var lambda = new AWS.Lambda();
+
+    lambda.invoke(pullParams, function(error, data) {
+      if (error) {
+        prompt(error);
+      } else {
+        pullResults = JSON.parse(JSON.stringify(data)).Payload;
+        console.log(pullResults);
+      }
+    });
+    console.log(pullResults);
+
     const claimOptions = [
       { label: "Claim Reason", value: "None" },
       { label: "Collision", value: "0" },
@@ -97,6 +143,19 @@ class CollisionForm extends Component {
             />
           </div>
 
+          <button className="btn mt-3">
+            <input
+              type="file"
+              id="file"
+              ref="fileUploader"
+              name="url"
+              value={this.state.url}
+              onChange={this.handleClick}
+            />
+          </button>
+
+          <br />
+
           <button
             type="submit"
             className="btn mt-3"
@@ -106,10 +165,21 @@ class CollisionForm extends Component {
               Get Recommendation!
             </span>
           </button>
+
+          <h4 className="pt-4 font-weight-bold">
+            {pullResults === null ? "Still investigating" : pullResults}
+          </h4>
         </form>
       </div>
     );
   }
 }
 
-export default CollisionForm;
+CollisionForm.propTypes = {
+  collisioncreate: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { collisioncreate }
+)(CollisionForm);

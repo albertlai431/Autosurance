@@ -1,11 +1,11 @@
-import './App.css';
+import "./App.css";
 
-import React from 'react';
+import React from "react";
 
-import logo from './logo.svg';
+import logo from "./logo.svg";
 
 function App() {
-  var AWS = require('aws-sdk');
+  var AWS = require("aws-sdk");
 
   AWS.config = new AWS.Config();
   AWS.config.accessKeyId = "***REMOVED***";
@@ -14,10 +14,10 @@ function App() {
 
   // create JSON object for parameters for invoking Lambda function
   var pullParams = {
-    FunctionName : 'predictImage',
-    InvocationType : 'RequestResponse',
-    LogType : 'None',
-    Payload : JSON.stringify({"Body" : "0001.jpg"})
+    FunctionName: "predictImage",
+    InvocationType: "RequestResponse",
+    LogType: "None",
+    Payload: JSON.stringify({ Body: "0001.jpg" })
   };
 
   // create variable to hold data returned by the Lambda function
@@ -43,12 +43,16 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
-  className = "App-link"
-  href = "https://reactjs.org"
-  target = "_blank"
-  rel = "noopener noreferrer" > Learn React</a>
-      </header><
-        /div>
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {" "}
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 

@@ -1,11 +1,16 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 // Helper
 import SelectList from "../common/SelectList";
 
+// Action func
+import { signup } from "../../actions/FormActions";
+
 class Form extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       coverage: "",
@@ -45,6 +50,7 @@ class Form extends Component {
     };
 
     console.log(registerData);
+    this.props.signup(registerData, this.props.history);
   };
 
   render() {
@@ -246,4 +252,11 @@ class Form extends Component {
   }
 }
 
-export default Form;
+Form.propTypes = {
+  signup: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { signup }
+)(Form);
