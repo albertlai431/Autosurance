@@ -22,11 +22,63 @@ class Form extends Component {
       policy: "",
       age: "",
       country: "",
-      income: ""
+      income: "",
+      policyNum: ""
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  hydrateStateWithLocalStorage() {
+    // for all items in state
+    for (let id in this.state) {
+      // if the key exists in localStorage
+      if (sessionStorage.hasOwnProperty(id)) {
+        // get the key's value from localStorage
+        let value = sessionStorage.getItem(id);
+
+        // parse the localStorage string and setState
+        try {
+          value = JSON.parse(value);
+          console.log(value);
+          this.setState({ [id]: value });
+        } catch (e) {
+          // handle empty string
+          this.setState({ [id]: value });
+        }
+      }
+    }
+  }
+
+  saveStateToLocalStorage() {
+    // for every item in React state
+    for (let id in this.state) {
+      // save to localStorage
+      sessionStorage.setItem(id, JSON.stringify(this.state[id]));
+    }
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.hydrateStateWithLocalStorage();
+
+    // add event listener to save state to localStorage
+    // when user leaves/refreshes the page
+    window.addEventListener(
+      "beforeunload",
+      this.saveStateToLocalStorage.bind(this)
+    );
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      "beforeunload",
+      this.saveStateToLocalStorage.bind(this)
+    );
+
+    // saves if component has a chance to unmount
+    this.saveStateToLocalStorage();
   }
 
   onChange = e => {
@@ -46,11 +98,13 @@ class Form extends Component {
       policy: this.state.policy,
       age: this.state.age,
       country: this.state.country,
-      income: this.state.income
+      income: this.state.income,
+      policyNum: this.state.policyNum
     };
 
     console.log(registerData);
     this.props.signup(registerData, this.props.history);
+    sessionStorage.setItem("signup", JSON.stringify(registerData));
   };
 
   render() {
@@ -104,6 +158,13 @@ class Form extends Component {
       { label: "Personal Auto", value: "0" },
       { label: "Corporate Auto", value: "1" },
       { label: "Special Auto", value: "2" }
+    ];
+
+    const policyTypeOptions = [
+      { label: "Select Policy Type", value: "None" },
+      { label: "L1", value: "0" },
+      { label: "L2", value: "1" },
+      { label: "L3", value: "2" }
     ];
 
     return (
@@ -232,6 +293,21 @@ class Form extends Component {
                   value={this.state.policy}
                   onChange={this.onChange}
                   options={policyOptions}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-3">
+            <div className="row">
+              <div className="col">
+                <label for="formGroupExampleInput">Policy Number</label>
+                <SelectList
+                  name="policyNum"
+                  placeholder="policyNum"
+                  value={this.state.policyNum}
+                  onChange={this.onChange}
+                  options={policyTypeOptions}
                 />
               </div>
             </div>

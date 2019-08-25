@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import ImageUploader from "react-images-upload";
+
 // Helper
 import SelectList from "../common/SelectList";
 
 // Action func
-import { collisioncreate } from "../../actions/FormActions";
+import { collisioncreate, imageExport } from "../../actions/FormActions";
 
 class CollisionForm extends Component {
   constructor(props) {
@@ -16,17 +18,32 @@ class CollisionForm extends Component {
       claim: "",
       class: "",
       size: "",
-      url: ""
+      url: "",
+      formData: [],
+      pictures: []
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.onDrop = this.onDrop.bind(this);
+  }
+
+  componentDidMount() {
+    const data = JSON.parse(sessionStorage.getItem("signup"));
+    this.setState({ formData: data });
   }
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
+  onDrop(picture) {
+    this.setState({
+      pictures: this.state.pictures.concat(picture)
+    });
+  }
 
   onSubmit = e => {
     e.preventDefault();
@@ -35,14 +52,35 @@ class CollisionForm extends Component {
       claim: this.state.claim,
       class: this.state.class,
       size: this.state.size,
-      url: this.state.url,
       premium: "8",
       inception: "8",
       policies: "1"
     };
 
-    console.log(collisionData);
-    this.props.collisioncreate(collisionData, this.props.history);
+    const image = {
+      url: this.state.pictures
+    };
+
+    const result = {};
+
+    Object.keys(this.state.formData).forEach(
+      key => (result[key] = this.state.formData[key])
+    );
+
+    Object.keys(collisionData).forEach(
+      key => (result[key] = collisionData[key])
+    );
+
+    console.log(image);
+    console.log(result);
+
+    //console.log(collisionData);
+    this.props.imageExport(image);
+    this.props.collisioncreate(result, this.props.history);
+    /* sessionStorage.setItem(
+      "signup"
+      //JSON.stringify(JSON.parse(this.state.formData.concat(collisionData)))
+    ); */
   };
 
   handleClick(e) {
@@ -108,6 +146,7 @@ class CollisionForm extends Component {
       { label: "Luxury Car", value: "5" }
     ];
 
+    console.log(this.state.formData);
     return (
       <div className="container pt-5" style={{ paddingBottom: "200px" }}>
         <h3 className="font-weight-bold text-center">Enter Collision Data</h3>
@@ -146,7 +185,7 @@ class CollisionForm extends Component {
             />
           </div>
 
-          <button className="btn mt-3">
+          {/*  <button className="btn mt-3">
             <input
               type="file"
               id="file"
@@ -155,7 +194,15 @@ class CollisionForm extends Component {
               value={this.state.url}
               onChange={this.handleClick}
             />
-          </button>
+          </button> */}
+
+          <ImageUploader
+            withIcon={true}
+            buttonText="Choose images"
+            onChange={this.onDrop}
+            imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+            maxFileSize={5242880}
+          />
 
           <br />
 
@@ -179,10 +226,11 @@ class CollisionForm extends Component {
 }
 
 CollisionForm.propTypes = {
-  collisioncreate: PropTypes.func.isRequired
+  collisioncreate: PropTypes.func.isRequired,
+  imageExport: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { collisioncreate }
+  { collisioncreate, imageExport }
 )(CollisionForm);
