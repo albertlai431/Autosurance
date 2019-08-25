@@ -94,7 +94,7 @@ class Form extends Component {
     ];
 
     const martialOptions = [
-      { label: "Select Martial", value: "None" },
+      { label: "Select Marital", value: "None" },
       { label: "Married", value: "0" },
       { label: "Single", value: "1" }
     ];
@@ -215,7 +215,7 @@ class Form extends Component {
           <div className="pt-3">
             <div className="row">
               <div className="col">
-                <label for="formGroupExampleInput">Martial Status</label>
+                <label for="formGroupExampleInput">Marital Status</label>
                 <SelectList
                   name="martial"
                   placeholder="martial"

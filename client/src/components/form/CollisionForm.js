@@ -35,7 +35,10 @@ class CollisionForm extends Component {
       claim: this.state.claim,
       class: this.state.class,
       size: this.state.size,
-      url: this.state.url
+      url: this.state.url,
+      premium: "8",
+      inception: "8",
+      policies: "1"
     };
 
     console.log(collisionData);
@@ -75,7 +78,7 @@ class CollisionForm extends Component {
         prompt(error);
       } else {
         pullResults = JSON.parse(JSON.stringify(data)).Payload;
-        console.log(pullResults);
+        //console.log(pullResults);
       }
     });
     console.log(pullResults);
