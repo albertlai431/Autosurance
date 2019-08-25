@@ -3,10 +3,13 @@ import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
 import { connect } from "react-redux";
 
-// Action func
-import { collisioncreate, imageExport } from "../../actions/FormActions";
+import ImageUploader from "react-images-upload";
+
 // Helper
 import SelectList from "../common/SelectList";
+
+// Action func
+import { collisioncreate, imageExport } from "../../actions/FormActions";
 
 class CollisionForm extends Component {
   constructor(props) {
@@ -38,7 +41,9 @@ class CollisionForm extends Component {
   };
 
   onDrop(picture) {
-    this.setState({ pictures: this.state.pictures.concat(picture) });
+    this.setState({
+      pictures: this.state.pictures.concat(picture)
+    });
   }
 
   onSubmit = e => {
@@ -53,7 +58,9 @@ class CollisionForm extends Component {
       policies: "1"
     };
 
-    const image = { url: this.state.pictures };
+    const image = {
+      url: this.state.pictures
+    };
 
     const result = {};
 
@@ -68,7 +75,7 @@ class CollisionForm extends Component {
     console.log(image);
     console.log(result);
 
-    // console.log(collisionData);
+    //console.log(collisionData);
     this.props.imageExport(image);
     this.props.collisioncreate(result, this.props.history);
     /* sessionStorage.setItem(
@@ -183,6 +190,14 @@ class CollisionForm extends Component {
               options={sizeOptions}
             />
           </div>
+
+          <ImageUploader
+            withIcon={true}
+            buttonText="Choose images"
+            onChange={this.onDrop}
+            imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+            maxFileSize={5242880}
+          />
 
           <ImageUploader
             withIcon={true}
