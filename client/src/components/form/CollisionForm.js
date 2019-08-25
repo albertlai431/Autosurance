@@ -1,44 +1,36 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
-// Helper
-import SelectList from "../common/SelectList";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 
 // Action func
-import { collisioncreate } from "../../actions/FormActions";
+import {collisioncreate} from "../../actions/FormActions";
+// Helper
+import SelectList from "../common/SelectList";
 
 class CollisionForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      claim: "",
-      class: "",
-      size: "",
-      url: ""
-    };
+    this.state = {claim : "", class : "", size : "", url : ""};
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+  onChange = e => { this.setState({[e.target.name] : e.target.value}); };
 
   onSubmit = e => {
     e.preventDefault();
 
     const collisionData = {
-      claim: this.state.claim,
-      class: this.state.class,
-      size: this.state.size,
-      url: this.state.url,
-      premium: "8",
-      inception: "8",
-      policies: "1"
+      claim : this.state.claim,
+      class : this.state.class,
+      size : this.state.size,
+      url : this.state.url,
+      premium : "8",
+      inception : "8",
+      policies : "1"
     };
 
     console.log(collisionData);
@@ -46,7 +38,7 @@ class CollisionForm extends Component {
   };
 
   handleClick(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({[e.target.name] : e.target.value});
 
     this.refs.fileUploader.click();
     console.log(e);
@@ -62,10 +54,10 @@ class CollisionForm extends Component {
 
     // create JSON object for parameters for invoking Lambda function
     var pullParams = {
-      FunctionName: "predictImage",
-      InvocationType: "RequestResponse",
-      LogType: "None",
-      Payload: JSON.stringify({ Body: "0001.jpg" })
+      FunctionName : "predictImage",
+      InvocationType : "RequestResponse",
+      LogType : "None",
+      Payload : JSON.stringify({Body : "0001.jpg"})
     };
 
     // create variable to hold data returned by the Lambda function
@@ -78,38 +70,33 @@ class CollisionForm extends Component {
         prompt(error);
       } else {
         pullResults = JSON.parse(JSON.stringify(data)).Payload;
-        //console.log(pullResults);
+        // console.log(pullResults);
       }
     });
     console.log(pullResults);
 
     const claimOptions = [
-      { label: "Claim Reason", value: "None" },
-      { label: "Collision", value: "0" },
-      { label: "Scratch/Dent", value: "1" },
-      { label: "Hail", value: "2" },
-      { label: "Other", value: "3" }
+      {label : "Claim Reason", value : "None"},
+      {label : "Collision", value : "0"}, {label : "Scratch/Dent", value : "1"},
+      {label : "Hail", value : "2"}, {label : "Other", value : "3"}
     ];
 
     const classOptions = [
-      { label: "Vehicle Class", value: "None" },
-      { label: "Small", value: "0" },
-      { label: "Medium", value: "1" },
-      { label: "Large", value: "2" }
+      {label : "Vehicle Class", value : "None"}, {label : "Small", value : "0"},
+      {label : "Medium", value : "1"}, {label : "Large", value : "2"}
     ];
 
     const sizeOptions = [
-      { label: "Vehicle Size", value: "None" },
-      { label: "Two-Door Car", value: "0" },
-      { label: "Four-Door Car", value: "1" },
-      { label: "SUV", value: "2" },
-      { label: "Luxury SUV", value: "3" },
-      { label: "Sports Car", value: "4" },
-      { label: "Luxury Car", value: "5" }
+      {label : "Vehicle Size", value : "None"},
+      {label : "Two-Door Car", value : "0"},
+      {label : "Four-Door Car", value : "1"}, {label : "SUV", value : "2"},
+      {label : "Luxury SUV", value : "3"}, {label : "Sports Car", value : "4"},
+      {label : "Luxury Car", value : "5"}
     ];
 
     return (
-      <div className="container pt-5" style={{ paddingBottom: "200px" }}>
+      <div className="container pt-5" style={{
+      paddingBottom: "200px" }}>
         <h3 className="font-weight-bold text-center">Enter Collision Data</h3>
 
         <form onSubmit={this.onSubmit} className="pt-3">
@@ -117,11 +104,12 @@ class CollisionForm extends Component {
             <div class="col">
               <label for="formGroupExampleInput">Specify claim reason</label>
               <SelectList
-                name="claim"
-                placeholder="claim"
+    name = "claim"
+    placeholder = "claim"
                 value={this.state.claim}
                 onChange={this.onChange}
-                options={claimOptions}
+                options={
+      claimOptions}
               />
             </div>
             <div class="col">
@@ -160,20 +148,20 @@ class CollisionForm extends Component {
           <br />
 
           <button
-            type="submit"
-            className="btn mt-3"
-            style={{ backgroundColor: "#6c63ff", borderRadius: "20px" }}
-          >
-            <span className="pl-2 pr-2" style={{ color: "white" }}>
-              Get Recommendation!
-            </span>
+                type = "submit"
+                className = "btn mt-3"
+                style =
+                    {{ backgroundColor: "#6c63ff", borderRadius: "20px" }} >
+                    <span className = "pl-2 pr-2" style = {{ color: "white" }}>
+                        Get Recommendation!</span>
           </button>
 
-          <h4 className="pt-4 font-weight-bold">
-            {pullResults === null ? "Still investigating" : pullResults}
-          </h4>
-        </form>
-      </div>
+                    <h4 className = "pt-4 font-weight-bold">{
+                        pullResults === null
+                            ? "Still investigating"
+                            : pullResults}</h4>
+        </form><
+                    /div>
     );
   }
 }
