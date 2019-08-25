@@ -95,15 +95,18 @@ class Form extends Component {
       gender: this.state.gender,
       location: this.state.location,
       martial: this.state.martial,
-      policy: this.state.policy,
-      age: this.state.age,
-      country: this.state.country,
+      policy: this.state.policy /* 
+      age: this.state.age, */,
+      country: "0",
       income: this.state.income,
       policyNum: this.state.policyNum
     };
 
-    console.log(registerData);
-    this.props.signup(registerData, this.props.history);
+    console.log(
+      registerData
+    ); /* 
+    this.props.signup(registerData, this.props.history); */
+    this.props.history.push("/dashboard");
     sessionStorage.setItem("signup", JSON.stringify(registerData));
   };
 
@@ -136,8 +139,7 @@ class Form extends Component {
     const genderOptions = [
       { label: "Select Gender", value: "None" },
       { label: "Male", value: "0" },
-      { label: "Female", value: "1" },
-      { label: "Other", value: "2" }
+      { label: "Female", value: "1" }
     ];
 
     const locationOptions = [

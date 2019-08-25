@@ -10,6 +10,9 @@ import SelectList from "../common/SelectList";
 // Action func
 import { collisioncreate, imageExport } from "../../actions/FormActions";
 
+// Keys
+import keys from "../../config/keys_dev";
+
 class CollisionForm extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +23,8 @@ class CollisionForm extends Component {
       size: "",
       url: "",
       formData: [],
-      pictures: []
+      pictures: [],
+      severity: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -54,7 +58,8 @@ class CollisionForm extends Component {
       size: this.state.size,
       premium: "8",
       inception: "8",
-      policies: "1"
+      policies: "1",
+      severity: this.state.severity
     };
 
     const image = {
@@ -94,8 +99,8 @@ class CollisionForm extends Component {
     var AWS = require("aws-sdk");
 
     AWS.config = new AWS.Config();
-    AWS.config.accessKeyId = "***REMOVED***";
-    AWS.config.secretAccessKey = "***REMOVED***";
+    AWS.config.accessKeyId = `${keys.accessKeyId}`;
+    AWS.config.secretAccessKey = `${keys.secretAccessKey}`;
     AWS.config.region = "us-east-1";
 
     // create JSON object for parameters for invoking Lambda function
@@ -146,6 +151,15 @@ class CollisionForm extends Component {
       { label: "Luxury Car", value: "5" }
     ];
 
+    const severityOptions = [
+      { label: "Choose severity", value: "None" },
+      { label: "1", value: "1" },
+      { label: "2", value: "2" },
+      { label: "3", value: "3" },
+      { label: "4", value: "4" },
+      { label: "5", value: "5" }
+    ];
+
     console.log(this.state.formData);
     return (
       <div className="container pt-5" style={{ paddingBottom: "200px" }}>
@@ -174,15 +188,27 @@ class CollisionForm extends Component {
               />
             </div>
           </div>
-          <div className="form-group">
-            <label for="formGroupExampleInput">Enter vehicle size</label>
-            <SelectList
-              name="size"
-              placeholder="size"
-              value={this.state.size}
-              onChange={this.onChange}
-              options={sizeOptions}
-            />
+          <div className="row">
+            <div className="col">
+              <label for="formGroupExampleInput">Enter vehicle size</label>
+              <SelectList
+                name="size"
+                placeholder="size"
+                value={this.state.size}
+                onChange={this.onChange}
+                options={sizeOptions}
+              />
+            </div>
+            <div className="col">
+              <label for="formGroupExampleInput">Enter severity</label>
+              <SelectList
+                name="severity"
+                placeholder="severity"
+                value={this.state.severity}
+                onChange={this.onChange}
+                options={severityOptions}
+              />
+            </div>
           </div>
 
           {/*  <button className="btn mt-3">
