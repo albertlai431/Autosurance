@@ -51,7 +51,7 @@ class Header extends Component {
                 </NavLink>
               </NavItem> */}
               <NavItem>
-                <NavLink className="mr-2 text-white" href="/dashboard">
+                <NavLink className="mr-3 text-white" href="/dashboard">
                   Dashboard
                 </NavLink>
               </NavItem>
@@ -59,7 +59,10 @@ class Header extends Component {
                 href="/form"
                 style={{ backgroundColor: "white", borderRadius: "5px" }}
               >
-                <span style={{ color: "#6c63ff" }} className="font-weight-bold">
+                <span
+                  style={{ color: "#6c63ff" }}
+                  className="font-weight-bold pl-2 pr-2"
+                >
                   Sign Up
                 </span>
               </NavLink>

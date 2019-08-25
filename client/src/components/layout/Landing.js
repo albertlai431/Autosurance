@@ -38,7 +38,12 @@ class Landing extends Component {
                 className="btn"
                 style={{ backgroundColor: "white" }}
               >
-                <span style={{ color: "#6c63ff" }}>Get Started</span>
+                <span
+                  style={{ color: "#6c63ff" }}
+                  className="font-weight-bold pl-1 pr-1"
+                >
+                  Get Started
+                </span>
               </a>
             </div>
           </Container>
@@ -50,7 +55,6 @@ class Landing extends Component {
         />
 
         <Container>
-          <hr width="75%" />
           <h3 className="text-center">Your Problem</h3>
           <Row className="pt-3">
             <Col sm="6">
@@ -76,10 +80,15 @@ class Landing extends Component {
             </Col>
           </Row>
 
-          <hr width="75%" />
-          <h3 className="text-center pt-4">Our Solution</h3>
+          <hr
+            style={{ borderWidth: "2px", backgroundColor: "black" }}
+            className="mt-5 mb-4"
+          />
+          <h3 className="text-center pt-4" style={{ marginBottom: 0 }}>
+            Our Solution
+          </h3>
           <Row>
-            <div class="col-12 mt-3">
+            <div class="col-12">
               <Card body style={{ border: "none" }}>
                 <div class="card-horizontal">
                   <div class="img-square-wrapper text-center">

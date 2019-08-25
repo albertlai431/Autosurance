@@ -27,7 +27,8 @@ class CollisionForm extends Component {
       severity: "",
       fileName: "",
       ppr: "",
-      ppr1: ""
+      ppr1: "",
+      isHidden: true
     };
 
     this.onChange = this.onChange.bind(this);
@@ -56,6 +57,10 @@ class CollisionForm extends Component {
       default:
         this.setState({ [e.target.name]: e.target.value });
     }
+  };
+
+  onHidden = () => {
+    this.setState({ isHidden: !this.state.isHidden });
   };
 
   onDrop(picture) {
@@ -285,15 +290,36 @@ class CollisionForm extends Component {
             </span>
           </button>
 
-          <h4 className="pt-4 font-weight-bold">
-            {pr === null || "undefined" ? "Still investigating..." : pr}
-            {this.state.ppr}
-          </h4>
+          <div style={{ float: "right" }}>
+            <button
+              type="submit"
+              className="btn mt-3"
+              style={{ backgroundColor: "#6c63ff", borderRadius: "20px" }}
+              onClick={this.onHidden.bind(this)}
+            >
+              <span
+                className="pl-2 pr-2"
+                style={{
+                  color: "white"
+                }}
+              >
+                View Results!
+              </span>
+            </button>
+          </div>
 
-          <h4 className="pt-3 font-weight-bold">
-            {pr1 === null || "undefined" ? "Still calculating..." : "$" + pr1}
-            {this.state.ppr1}
-          </h4>
+          {!this.state.isHidden ? (
+            <div>
+              <h4 className="pt-4 font-weight-bold text-center">
+                Accident Validation: {this.state.ppr.replace(/['"]+/g, "")}
+              </h4>
+              <h4 className="pt-3 font-weight-bold text-center">
+                Reimbursement Amount: ${parseInt(this.state.ppr1, 10)}
+              </h4>
+            </div>
+          ) : (
+            ""
+          )}
         </form>
       </div>
     );
