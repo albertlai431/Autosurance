@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
-import React, {Component} from "react";
+import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 // Action func
-import {collisioncreate, imageExport} from "../../actions/FormActions";
+import { collisioncreate, imageExport } from "../../actions/FormActions";
 // Keys
 import keys from "../../config/keys_dev";
 // Helper
@@ -18,14 +18,16 @@ class CollisionForm extends Component {
     super(props);
 
     this.state = {
-      claim : "",
-      class : "",
-      size : "",
-      url : "",
-      formData : [],
-      pictures : [],
-      severity : "",
-      fileName : ""
+      claim: "",
+      class: "",
+      size: "",
+      url: "",
+      formData: [],
+      pictures: [],
+      severity: "",
+      fileName: "",
+      ppr: "",
+      ppr1: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -37,51 +39,55 @@ class CollisionForm extends Component {
 
   componentDidMount() {
     const data = JSON.parse(sessionStorage.getItem("signup"));
-    this.setState({formData : data});
+    this.setState({ formData: data });
   }
 
-  onChange = e => { this.setState({[e.target.name] : e.target.value}); };
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   fileChange = e => {
     switch (e.target.name) {
-    case "selectedFile":
-      if (e.target.files.length > 0) {
-        this.setState({fileName : e.target.files[0].name});
-      }
-      break;
-    default:
-      this.setState({[e.target.name] : e.target.value});
+      case "selectedFile":
+        if (e.target.files.length > 0) {
+          this.setState({ fileName: e.target.files[0].name });
+        }
+        break;
+      default:
+        this.setState({ [e.target.name]: e.target.value });
     }
   };
 
   onDrop(picture) {
-    this.setState({pictures : this.state.pictures.concat(picture)});
+    this.setState({ pictures: this.state.pictures.concat(picture) });
   }
 
   onSubmit = e => {
     e.preventDefault();
 
     const collisionData = {
-      claim : this.state.claim,
-      class : this.state.class,
-      size : this.state.size,
-      premium : "8",
-      inception : "8",
-      policies : "1",
-      severity : this.state.severity
+      claim: this.state.claim,
+      class: this.state.class,
+      size: this.state.size,
+      premium: "8",
+      inception: "8",
+      policies: "1",
+      severity: this.state.severity
     };
 
-    const image = {url : this.state.pictures};
+    const image = { url: this.state.pictures };
 
     // pic = image.url.File.name;
 
     const result = {};
 
-    Object.keys(this.state.formData)
-        .forEach(key => (result[key] = this.state.formData[key]));
+    Object.keys(this.state.formData).forEach(
+      key => (result[key] = this.state.formData[key])
+    );
 
-    Object.keys(collisionData)
-        .forEach(key => (result[key] = collisionData[key]));
+    Object.keys(collisionData).forEach(
+      key => (result[key] = collisionData[key])
+    );
 
     console.log(image);
     console.log(result);
@@ -95,17 +101,17 @@ class CollisionForm extends Component {
 
     // create JSON object for parameters for invoking Lambda function
     var pullParams = {
-      FunctionName : "predictImage",
-      InvocationType : "RequestResponse",
-      LogType : "None",
-      Payload : JSON.stringify({Body : "jpg.jpg"})
+      FunctionName: "predictImage",
+      InvocationType: "RequestResponse",
+      LogType: "None",
+      Payload: JSON.stringify({ Body: "jpg.jpg" })
     };
 
     var pullParams1 = {
-      FunctionName : "predictCost",
-      InvocationType : "RequestResponse",
-      LogType : "None",
-      Payload : JSON.stringify({Body : "json.json"})
+      FunctionName: "predictCost",
+      InvocationType: "RequestResponse",
+      LogType: "None",
+      Payload: JSON.stringify({ Body: "json.json" })
     };
 
     // create variable to hold data returned by the Lambda function
@@ -113,31 +119,34 @@ class CollisionForm extends Component {
 
     var lambda = new AWS.Lambda();
 
-    lambda.invoke(pullParams, function(error, data) {
+    lambda.invoke(pullParams, (error, data) => {
       if (error) {
         prompt(error);
       } else {
         pullResults = JSON.parse(JSON.stringify(data)).Payload;
-        // console.log(pullResults);
+        console.log(pullResults);
         pr = pullResults;
+        //console.log(pr);
+        this.setState({ ppr: pr });
       }
     });
 
     var lambda1 = new AWS.Lambda();
 
-    lambda1.invoke(pullParams1, function(error, data) {
+    lambda1.invoke(pullParams1, (error, data) => {
       if (error) {
         prompt(error);
       } else {
         pullResults1 = JSON.parse(JSON.stringify(data)).Payload;
         // console.log(pullResults);
         pr1 = pullResults1;
+        this.setState({ ppr1: pr1 });
       }
     });
 
     console.log(pr + " " + pr1);
     // console.log(collisionData);
-    const fname = {filename : this.state.fileName};
+    const fname = { filename: this.state.fileName };
     this.props.imageExport(fname);
     this.props.collisioncreate(result, this.props.history);
     /* sessionStorage.setItem(
@@ -147,67 +156,72 @@ class CollisionForm extends Component {
   };
 
   handleClick(e) {
-    this.setState({[e.target.name] : e.target.value});
+    this.setState({ [e.target.name]: e.target.value });
 
     this.refs.fileUploader.click();
     console.log(e);
   }
 
   render() {
+    console.log(this.state.ppr);
     const claimOptions = [
-      {label : "Claim Reason", value : "None"},
-      {label : "Collision", value : "0"}, {label : "Scratch/Dent", value : "1"},
-      {label : "Hail", value : "2"}, {label : "Other", value : "3"}
+      { label: "Claim Reason", value: "None" },
+      { label: "Collision", value: "0" },
+      { label: "Scratch/Dent", value: "1" },
+      { label: "Hail", value: "2" },
+      { label: "Other", value: "3" }
     ];
 
     const classOptions = [
-      {label : "Vehicle Class", value : "None"}, {label : "Small", value : "0"},
-      {label : "Medium", value : "1"}, {label : "Large", value : "2"}
+      { label: "Vehicle Class", value: "None" },
+      { label: "Small", value: "0" },
+      { label: "Medium", value: "1" },
+      { label: "Large", value: "2" }
     ];
 
     const sizeOptions = [
-      {label : "Vehicle Size", value : "None"},
-      {label : "Two-Door Car", value : "0"},
-      {label : "Four-Door Car", value : "1"}, {label : "SUV", value : "2"},
-      {label : "Luxury SUV", value : "3"}, {label : "Sports Car", value : "4"},
-      {label : "Luxury Car", value : "5"}
+      { label: "Vehicle Size", value: "None" },
+      { label: "Two-Door Car", value: "0" },
+      { label: "Four-Door Car", value: "1" },
+      { label: "SUV", value: "2" },
+      { label: "Luxury SUV", value: "3" },
+      { label: "Sports Car", value: "4" },
+      { label: "Luxury Car", value: "5" }
     ];
 
     const severityOptions = [
-      {label : "Choose severity", value : "None"}, {label : "1", value : "1"},
-      {label : "2", value : "2"}, {label : "3", value : "3"},
-      {label : "4", value : "4"}, {label : "5", value : "5"}
+      { label: "Choose severity", value: "None" },
+      { label: "1", value: "1" },
+      { label: "2", value: "2" },
+      { label: "3", value: "3" },
+      { label: "4", value: "4" },
+      { label: "5", value: "5" }
     ];
 
-    const {fileName} = this.state;
+    const { fileName } = this.state;
     let file = null;
 
-    file = fileName
-        ? (<span>File Selected -
-           {fileName}</span>
+    file = fileName ? (
+      <span>File Selected -{fileName}</span>
     ) : (
-      <span>Choose a file...</span>);
+      <span>Choose a file...</span>
+    );
 
     console.log(this.state.formData);
     return (
-      <div
-    className = "container pt-5"
-    style =
-        {{ paddingBottom: "200px" }} >
-        <h3 className = "font-weight-bold text-center">Enter Collision Data<
-            /h3>
+      <div className="container pt-5" style={{ paddingBottom: "200px" }}>
+        <h3 className="font-weight-bold text-center">Enter Collision Data</h3>
 
         <form onSubmit={this.onSubmit} className="pt-3">
           <div class="row">
             <div class="col">
-              <label for="formGroupExampleInput">Specify claim reason</label><
-        SelectList
-    name = "claim"
-    placeholder = "claim"
+              <label for="formGroupExampleInput">Specify claim reason</label>
+              <SelectList
+                name="claim"
+                placeholder="claim"
                 value={this.state.claim}
                 onChange={this.onChange}
-                options={
-      claimOptions}
+                options={claimOptions}
               />
             </div>
             <div class="col">
@@ -235,13 +249,14 @@ class CollisionForm extends Component {
             <div className="col">
               <label for="formGroupExampleInput">Enter severity</label>
               <SelectList
-                name = "severity"
-                placeholder = "severity"
-                value = {this.state.severity} onChange =
-                    {this.onChange} options =
-                { severityOptions } />
-            </div >
-                    </div>
+                name="severity"
+                placeholder="severity"
+                value={this.state.severity}
+                onChange={this.onChange}
+                options={severityOptions}
+              />
+            </div>
+          </div>
 
           <div>
             <input
@@ -250,19 +265,20 @@ class CollisionForm extends Component {
               name="selectedFile"
               onChange={event => this.fileChange(event)}
             />
-                    <label htmlFor = "file">{file}</label>
+            <label htmlFor="file">{file}</label>
           </div>
 
-                    <br />
+          <br />
 
-                    < button
-                type = "submit"
-                className = "btn mt-3"
-                style = {{ backgroundColor: "#6c63ff", borderRadius: "20px" }} >
-                        < span
-                className = "pl-2 pr-2"
+          <button
+            type="submit"
+            className="btn mt-3"
+            style={{ backgroundColor: "#6c63ff", borderRadius: "20px" }}
+          >
+            <span
+              className="pl-2 pr-2"
               style={{
-      color: "white"
+                color: "white"
               }}
             >
               Get Recommendation!
@@ -271,10 +287,12 @@ class CollisionForm extends Component {
 
           <h4 className="pt-4 font-weight-bold">
             {pr === null || "undefined" ? "Still investigating..." : pr}
+            {this.state.ppr}
           </h4>
 
           <h4 className="pt-3 font-weight-bold">
             {pr1 === null || "undefined" ? "Still calculating..." : "$" + pr1}
+            {this.state.ppr1}
           </h4>
         </form>
       </div>
@@ -283,8 +301,11 @@ class CollisionForm extends Component {
 }
 
 CollisionForm.propTypes = {
-  collisioncreate : PropTypes.func.isRequired,
-  imageExport : PropTypes.func.isRequired
+  collisioncreate: PropTypes.func.isRequired,
+  imageExport: PropTypes.func.isRequired
 };
 
-export default connect(null, {collisioncreate, imageExport})(CollisionForm);
+export default connect(
+  null,
+  { collisioncreate, imageExport }
+)(CollisionForm);
