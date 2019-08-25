@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
 import { connect } from "react-redux";
 
-import ImageUploader from "react-images-upload";
-
 // Helper
 import SelectList from "../common/SelectList";
 
@@ -190,14 +188,6 @@ class CollisionForm extends Component {
               options={sizeOptions}
             />
           </div>
-
-          <ImageUploader
-            withIcon={true}
-            buttonText="Choose images"
-            onChange={this.onDrop}
-            imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-            maxFileSize={5242880}
-          />
 
           <ImageUploader
             withIcon={true}
