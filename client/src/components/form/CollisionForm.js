@@ -12,6 +12,9 @@ import { collisioncreate, imageExport } from "../../actions/FormActions";
 // Keys
 import keys from "../../config/keys_dev";
 
+//let pic;
+let pr, pr1;
+
 class CollisionForm extends Component {
   constructor(props) {
     super(props);
@@ -65,6 +68,8 @@ class CollisionForm extends Component {
       url: this.state.pictures
     };
 
+    //pic = image.url.File.name;
+
     const result = {};
 
     Object.keys(this.state.formData).forEach(
@@ -107,11 +112,18 @@ class CollisionForm extends Component {
       FunctionName: "predictImage",
       InvocationType: "RequestResponse",
       LogType: "None",
-      Payload: JSON.stringify({ Body: "0001.jpg" })
+      Payload: JSON.stringify({ Body: "jpg.jpg" })
+    };
+
+    var pullParams1 = {
+      FunctionName: "predictCost",
+      InvocationType: "RequestResponse",
+      LogType: "None",
+      Payload: JSON.stringify({ Body: "json.json" })
     };
 
     // create variable to hold data returned by the Lambda function
-    var pullResults;
+    var pullResults, pullResults1;
 
     var lambda = new AWS.Lambda();
 
@@ -123,7 +135,20 @@ class CollisionForm extends Component {
         // console.log(pullResults);
       }
     });
-    console.log(pullResults);
+    pr = pullResults;
+
+    var lambda1 = new AWS.Lambda();
+
+    lambda1.invoke(pullParams1, function(error, data) {
+      if (error) {
+        prompt(error);
+      } else {
+        pullResults1 = JSON.parse(JSON.stringify(data)).Payload;
+        // console.log(pullResults);
+      }
+    });
+    pr1 = pullResults1;
+    console.log(pr + " " + pr1);
 
     const claimOptions = [
       { label: "Claim Reason", value: "None" },
@@ -236,7 +261,11 @@ class CollisionForm extends Component {
           </button>
 
           <h4 className="pt-4 font-weight-bold">
-            {pullResults === null ? "Still investigating" : pullResults}
+            {pr === null ? "Still investigating..." : pr}
+          </h4>
+
+          <h4 className="pt-3 font-weight-bold">
+            {pr1 === null ? "Still calculating..." : "$" + pr1}
           </h4>
         </form>
       </div>
