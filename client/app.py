@@ -23,7 +23,7 @@ def image():
     print(request)
     file = request.files
     print(file)
-    img = Image.open(file)  # file["url"])
+    img = Image.open('./ai.jpg')  # file["url"])
     img.resize([224, 224])
     
     s3.put_object(Body=img.tobytes(), Bucket=bucket_name, Key="jpg.jpg")

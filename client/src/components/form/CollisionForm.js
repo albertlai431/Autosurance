@@ -60,6 +60,7 @@ class CollisionForm extends Component {
       severity: this.state.severity
     };
 
+    console.log(this.state.pictures.url);
     const image = { url: this.state.pictures };
 
     //pic = image.url.File.name;
