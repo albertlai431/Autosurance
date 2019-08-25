@@ -5,7 +5,7 @@ import json
 
 # Create an S3 client
 s3 = boto3.client('s3')
-bucket_name = 'ht6'
+bucket_name = 'ht6-1'
 app = Flask(__name__)
 
 
@@ -21,8 +21,9 @@ def collision():
 @app.route('/image', methods=['POST'])
 def image():
     print(request)
-    file = request.get_json('file')
+    file = request.files
     print(file)
-    img = Image.open('./ai.jpg')  # file["url"])
+    img = Image.open(file)  # file["url"])
     img.resize([224, 224])
+    
     s3.put_object(Body=img.tobytes(), Bucket=bucket_name, Key="jpg.jpg")

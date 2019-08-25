@@ -3,14 +3,12 @@ import React, { Component } from "react";
 import ImageUploader from "react-images-upload";
 import { connect } from "react-redux";
 
-// Helper
-import SelectList from "../common/SelectList";
-
 // Action func
 import { collisioncreate, imageExport } from "../../actions/FormActions";
-
 // Keys
 import keys from "../../config/keys_dev";
+// Helper
+import SelectList from "../common/SelectList";
 
 //let pic;
 let pr, pr1;
@@ -46,9 +44,7 @@ class CollisionForm extends Component {
   };
 
   onDrop(picture) {
-    this.setState({
-      pictures: this.state.pictures.concat(picture)
-    });
+    this.setState({ pictures: this.state.pictures.concat(picture) });
   }
 
   onSubmit = e => {
@@ -64,9 +60,7 @@ class CollisionForm extends Component {
       severity: this.state.severity
     };
 
-    const image = {
-      url: this.state.pictures
-    };
+    const image = { url: this.state.pictures };
 
     //pic = image.url.File.name;
 
@@ -83,7 +77,7 @@ class CollisionForm extends Component {
     console.log(image);
     console.log(result);
 
-    //console.log(collisionData);
+    // console.log(collisionData);
     this.props.imageExport(image);
     this.props.collisioncreate(result, this.props.history);
     /* sessionStorage.setItem(
@@ -105,7 +99,7 @@ class CollisionForm extends Component {
     AWS.config = new AWS.Config();
     AWS.config.accessKeyId = `${keys.accessKeyId}`;
     AWS.config.secretAccessKey = `${keys.secretAccessKey}`;
-    AWS.config.region = "us-east-1";
+    AWS.config.region = "us-east-2";
 
     // create JSON object for parameters for invoking Lambda function
     var pullParams = {
@@ -186,12 +180,7 @@ class CollisionForm extends Component {
 
     console.log(this.state.formData);
     return (
-      <div
-        className="container pt-5"
-        style={{
-          paddingBottom: "200px"
-        }}
-      >
+      <div className="container pt-5" style={{ paddingBottom: "200px" }}>
         <h3 className="font-weight-bold text-center">Enter Collision Data</h3>
 
         <form onSubmit={this.onSubmit} className="pt-3">
@@ -261,11 +250,11 @@ class CollisionForm extends Component {
           </button>
 
           <h4 className="pt-4 font-weight-bold">
-            {pr === null ? "Still investigating..." : pr}
+            {pr === null || "undefined" ? "Still investigating..." : pr}
           </h4>
 
           <h4 className="pt-3 font-weight-bold">
-            {pr1 === null ? "Still calculating..." : "$" + pr1}
+            {pr1 === null || "undefined" ? "Still calculating..." : "$" + pr1}
           </h4>
         </form>
       </div>
