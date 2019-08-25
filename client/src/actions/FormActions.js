@@ -30,7 +30,7 @@ export const collisioncreate = (data, history) => dispatch => {
 // Images
 export const imageExport = img => dispatch => {
   axios
-    .post("/images", img)
+    .post("/image", img)
     .then(res => console.log("success"))
     .catch(err =>
       dispatch({

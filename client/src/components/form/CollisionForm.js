@@ -78,23 +78,6 @@ class CollisionForm extends Component {
     console.log(image);
     console.log(result);
 
-    // console.log(collisionData);
-    this.props.imageExport(image);
-    this.props.collisioncreate(result, this.props.history);
-    /* sessionStorage.setItem(
-      "signup"
-      //JSON.stringify(JSON.parse(this.state.formData.concat(collisionData)))
-    ); */
-  };
-
-  handleClick(e) {
-    this.setState({ [e.target.name]: e.target.value });
-
-    this.refs.fileUploader.click();
-    console.log(e);
-  }
-
-  render() {
     var AWS = require("aws-sdk");
 
     AWS.config = new AWS.Config();
@@ -145,6 +128,23 @@ class CollisionForm extends Component {
     pr1 = pullResults1;
     console.log(pr + " " + pr1);
 
+    // console.log(collisionData);
+    this.props.imageExport(image);
+    this.props.collisioncreate(result, this.props.history);
+    /* sessionStorage.setItem(
+      "signup"
+      //JSON.stringify(JSON.parse(this.state.formData.concat(collisionData)))
+    ); */
+  };
+
+  handleClick(e) {
+    this.setState({ [e.target.name]: e.target.value });
+
+    this.refs.fileUploader.click();
+    console.log(e);
+  }
+
+  render() {
     const claimOptions = [
       { label: "Claim Reason", value: "None" },
       { label: "Collision", value: "0" },
