@@ -2,6 +2,7 @@ import boto3
 from PIL import Image
 from flask import Flask, escape, request
 import json
+import io
 
 # Create an S3 client
 s3 = boto3.client('s3')
@@ -18,12 +19,30 @@ def collision():
     return "Success"
 
 
-@app.route('/image', methods=['POST'])
+@app.route('/image', methods=['PUT', 'POST'])
 def image():
-    print(request)
-    file = request.files
-    print(file)
-    img = Image.open(file)  # file["url"])
-    img.resize([224, 224])
-    
-    s3.put_object(Body=img.tobytes(), Bucket=bucket_name, Key="jpg.jpg")
+
+    img = request.get_json('file')
+    filepath = "~/Pictures/" + img
+    s3.upload_file(filename, bucket_name, "jpg.jpg")
+    return "Success"
+
+
+"""
+    resized_img = img.resize([224, 224])
+    img = Image.open(file)  # file)
+    resized_img.save("jpeg.jpeg")
+    filename = "./ai.jpg"
+    s3.upload_file(img, bucket_name, "jpg.jpg")
+    s3.upload_file(filename, bucket_name, filename)
+    img = Image.open(file)
+
+    print(img)
+    s3.put_object(Body=resized_img.tobytes(),
+                  Bucket=bucket_name, Key="jpeg.jpeg")
+
+    imgByteArr = io.BytesIO()
+    resized_img.save(imgByteArr, format='JPEG')
+    imgByteArr = imgByteArr.getvalue()
+    s3.upload_fileobj(Body=imgByteArr, Bucket=bucket_name, Key="jpg.jpg")
+    """

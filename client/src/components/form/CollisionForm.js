@@ -24,13 +24,14 @@ class CollisionForm extends Component {
       url: "",
       formData: [],
       pictures: [],
-      severity: ""
+      severity: "",
+      fileName: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
-
+    this.fileChange = this.fileChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
   }
 
@@ -41,6 +42,18 @@ class CollisionForm extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  fileChange = e => {
+    switch (e.target.name) {
+      case "selectedFile":
+        if (e.target.files.length > 0) {
+          this.setState({ fileName: e.target.files[0].name });
+        }
+        break;
+      default:
+        this.setState({ [e.target.name]: e.target.value });
+    }
   };
 
   onDrop(picture) {
@@ -178,6 +191,15 @@ class CollisionForm extends Component {
       { label: "5", value: "5" }
     ];
 
+    const { fileName } = this.state;
+    let file = null;
+
+    file = fileName ? (
+      <span>File Selected - {fileName}</span>
+    ) : (
+      <span>Choose a file...</span>
+    );
+
     console.log(this.state.formData);
     return (
       <div className="container pt-5" style={{ paddingBottom: "200px" }}>
@@ -236,6 +258,16 @@ class CollisionForm extends Component {
             imgExtension={[".jpg", ".gif", ".png", ".gif"]}
             maxFileSize={5242880}
           />
+
+          <div>
+            <input
+              id="file"
+              type="file"
+              name="selectedFile"
+              onChange={event => this.fileChange(event)}
+            />
+            <label htmlFor="file">{file}</label>
+          </div>
 
           <br />
 
