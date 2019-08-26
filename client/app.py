@@ -26,23 +26,3 @@ def image():
     filepath = "/home/seen/Pictures/" + img['filename']
     s3.upload_file(filepath, bucket_name, "jpg.jpg")
     return "Success"
-
-
-"""
-    resized_img = img.resize([224, 224])
-    img = Image.open(file)  # file)
-    resized_img.save("jpeg.jpeg")
-    filename = "./ai.jpg"
-    s3.upload_file(img, bucket_name, "jpg.jpg")
-    s3.upload_file(filename, bucket_name, filename)
-    img = Image.open(file)
-
-    print(img)
-    s3.put_object(Body=resized_img.tobytes(),
-                  Bucket=bucket_name, Key="jpeg.jpeg")
-
-    imgByteArr = io.BytesIO()
-    resized_img.save(imgByteArr, format='JPEG')
-    imgByteArr = imgByteArr.getvalue()
-    s3.upload_fileobj(Body=imgByteArr, Bucket=bucket_name, Key="jpg.jpg")
-    """
