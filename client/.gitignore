@@ -22,6 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+src/config
 /config/keys_dev.js
 
 __pycache__/
